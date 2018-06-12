@@ -102,7 +102,7 @@
             <p>Each period lasts <span class="text-primary">{{duration.weekdays}}</span></p>
           </div>
           <div class="col-md-6">
-            
+            <button class="btn btn-primary" @click="editCourses">Edit Courses</button>
           </div>
         </div>
 
@@ -237,6 +237,10 @@ export default{
       this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours)
       this.courseform = false
       this.results = true
+    },
+    editCourses () {
+      this.results = false
+      this.courseform = true
     }
   },
   mounted () {

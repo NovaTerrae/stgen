@@ -37,39 +37,12 @@
             
             <!-- Side navigation links -->
             <li>
-                <ul class="collapsible collapsible-accordion">
-                    <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-chevron-right"></i> Submit blog<i class="fa fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#" class="waves-effect">Submit listing</a>
-                                </li>
-                                <li><a href="#" class="waves-effect">Registration form</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-hand-pointer-o"></i> Instruction<i class="fa fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#" class="waves-effect">For bloggers</a>
-                                </li>
-                                <li><a href="#" class="waves-effect">For authors</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-eye"></i> About<i class="fa fa-angle-down rotate-icon"></i></a>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#" class="waves-effect">Introduction</a>
-                                </li>
-                                <li><a href="#" class="waves-effect">Monthly meetings</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    
-                </ul>
+                STGEN is an app that lets you quickly scaffold a study timetable, given a number of courses with their priority. <br>
+
+            </li>
+            <li>
+              <b>Coming Soon:</b><br>
+                We will be able to save timetables to view offline or download as pdf
             </li>
             <!--/. Side navigation links -->
         </ul>
