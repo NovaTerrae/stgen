@@ -95,7 +95,19 @@
            
       </div>
 
-      <div class="table-responsive animated fadeIn" v-if="results">
+      <div class="animated fadeIn" v-if="results">
+        <p>Hello, The following study plan has been generated for you based on your request. Make sure to store it...</p>
+        <div class="row">
+          <div class="col-md-6">
+            <p>Each period lasts <span class="text-primary">{{duration.weekdays}}</span></p>
+          </div>
+          <div class="col-md-6">
+            
+          </div>
+        </div>
+
+        <div class="table-responsive">
+
         <table class="table">
           <thead class="secondary-color text-white">
               <tr>
@@ -112,6 +124,9 @@
         </table>
       </div>
 
+      </div>
+
+      
     </div>
 </template>
 
@@ -146,8 +161,10 @@ function periodsperday (hours) {
 }
 
 function insert (course, ppd, timetable) {
+  // see if there's space left
   let x = Math.floor(Math.random() * timetable.length)
   let y = Math.floor(Math.random() * ppd)
+
   if (timetable[x][y] === null || timetable[x][y] === undefined) {
     timetable[x][y] = course
   } else {
@@ -204,7 +221,8 @@ export default{
       courseform: true,
       results: false,
       timetable: [],
-      days: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+      days: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+      duration: {}
     }
   },
 
@@ -219,6 +237,12 @@ export default{
       this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours)
       this.courseform = false
       this.results = true
+    }
+  },
+  mounted () {
+    this.duration = {
+      weekdays: periodsperday(this.weekdayHours),
+      weekends: periodsperday(this.weekendHours)
     }
   }
 }
