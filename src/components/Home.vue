@@ -118,7 +118,7 @@
           <tbody>
             <tr v-for="(day, index) in timetable">
               <th scope="row">{{days[index]}}</th>
-              <td v-for="(period, index) in timetable[index]">{{period.coursename}}</td>
+              <td v-for="(period, index) in timetable[index]">{{period}}</td>
             </tr>
           </tbody>
         </table>
@@ -162,27 +162,23 @@ function periodsperday (hours) {
 
 function insert (course, ppd, timetable) {
   // see if there's space left
+  let m = 0
+  const ttt = timetable
+  for (let i = 0; i < ttt.length; i++) {
+    if (ttt[i].includes(undefined)) {
+      m++
+    }
+  }
+  if (m === 0) {
+    return
+  }
   let x = Math.floor(Math.random() * timetable.length)
   let y = Math.floor(Math.random() * ppd)
 
   if (timetable[x][y] === null || timetable[x][y] === undefined) {
-    timetable[x][y] = course
-  } else if (spaceLeft(timetable)) {
-    insert(course, ppd, timetable)
-  }
-}
-
-function spaceLeft (timetable) {
-  let i = 0
-  timetable.forEach((day) => {
-    if (day.length < 3) {
-      i++
-    }
-  })
-  if (i === 0) {
-    return false
+    timetable[x][y] = course.coursename
   } else {
-    return true
+    insert(course, ppd, timetable)
   }
 }
 
@@ -192,9 +188,10 @@ function makeTable (courses, weekendHours, weekdayHours) {
   let weekendTimetable = Array(2)
   // periods per day
   let ppd = periodsperday(weekdayHours)
+  let ppwd = periodsperday(weekendHours)
   // periods per week
   let ppw = 5 * ppd
-  let ppwWeekends = 2 * periodsperday(weekendHours)
+  let ppwWeekends = 2 * ppwd
 
   // calc total priority to know how often each course occurs
   let totalpriority = 0
@@ -203,10 +200,10 @@ function makeTable (courses, weekendHours, weekdayHours) {
   }
 
   for (let i = 0; i < weeklyTimetable.length; i++) {
-    weeklyTimetable[i] = []
+    weeklyTimetable[i] = Array(ppd)
   }
   for (let i = 0; i < weekendTimetable.length; i++) {
-    weekendTimetable[i] = []
+    weekendTimetable[i] = Array(ppwd)
   }
 
   // go through each cell in the timetable and fill it...
@@ -217,7 +214,7 @@ function makeTable (courses, weekendHours, weekdayHours) {
     }
     // same for weekends
     for (let k = 0; k < courses[i].occurs(totalpriority, ppwWeekends); k++) {
-      insert(courses[i], periodsperday(weekendHours), weekendTimetable)
+      insert(courses[i], ppwd, weekendTimetable)
     }
   }
   weeklyTimetable.forEach((day) => timetable.push(day))
@@ -248,6 +245,7 @@ export default{
       this.courses.splice(index, 1)
     },
     computeResults () {
+      // validation here, i don't even know how, cause we started with two empty courses I can't just test courses.length
       this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours)
       this.courseform = false
       this.results = true
