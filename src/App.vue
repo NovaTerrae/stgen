@@ -36,11 +36,11 @@
             <!--/Social-->
             
             <!-- Side navigation links -->
-            <li>
+            <li class="social p-2">
                 STGEN is an app that lets you quickly scaffold a study timetable, given a number of courses with their priority. <br>
 
             </li>
-            <li>
+            <li class="p-2">
               <b>Coming Soon:</b><br>
                 We will be able to save timetables to view offline or download as pdf
             </li>
