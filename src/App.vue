@@ -27,10 +27,10 @@
             <!--Social-->
             <li>
                 <ul class="social">
-                    <li><a href="#" class="icons-sm fb-ic"><i class="fa fa-facebook"> </i></a></li>
-                    <li><a href="#" class="icons-sm pin-ic"><i class="fa fa-pinterest"> </i></a></li>
+                    <li><a href="https://www.facebook.com/hellesanmi.santiago" class="icons-sm fb-ic"><i class="fa fa-facebook"> </i></a></li>
+                    <li><a href="https://github.com/itope84" class="icons-sm pin-ic"><i class="fa fa-github"> </i></a></li>
                     <li><a href="#" class="icons-sm gplus-ic"><i class="fa fa-google-plus"> </i></a></li>
-                    <li><a href="#" class="icons-sm tw-ic"><i class="fa fa-twitter"> </i></a></li>
+                    <li><a href="https://twitter.com/aidansantiago97" class="icons-sm tw-ic"><i class="fa fa-twitter"> </i></a></li>
                 </ul>
             </li>
             <!--/Social-->
@@ -45,6 +45,7 @@
                 We will be able to save timetables to view offline or download as pdf
             </li>
             <!--/. Side navigation links -->
+            <li style="position: absolute; bottom: 2vh" class="text-center">Built By <a href="https://itope84.github.io" class="text-secondary">Ilesanmi Temitope Santiago</a></li>
         </ul>
     </div>
     <div id="sidenav-overlay" @click="sidebarActive=false" v-if="sidebarActive"></div>

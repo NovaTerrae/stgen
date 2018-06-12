@@ -1,5 +1,5 @@
 <template>
-    <div class="page-container card">
+    <div class="page-container card p-4">
       <div class="row animated fadeIn" v-if="courseform">
             <!-- <div class="col-lg-5 d-none d-lg-inline-block">
                 <div class="w-100"style="background-image: url('img/stgen-logo-purple-bg.png'); background-size: cover; background-position: center; height: 100%;"></div>    
@@ -99,17 +99,17 @@
         <p>Hello, The following study plan has been generated for you based on your request. Make sure to store it...</p>
         <div class="row">
           <div class="col-md-6">
-            <p>Each period lasts <span class="text-primary">{{duration.weekdays}}</span></p>
+            <p>Each period lasts <span class="text-primary">{{duration.weekdays}}</span> hours</p>
           </div>
-          <div class="col-md-6">
-            <button class="btn btn-primary" @click="editCourses">Edit Courses</button>
+          <div class="col-md-6 d-flex">
+            <button class="btn btn-primary ml-auto" @click="editCourses">Edit Courses</button>
           </div>
         </div>
 
         <div class="table-responsive">
 
         <table class="table">
-          <thead class="secondary-color text-white">
+          <thead class="secondary-color text-white py-2">
               <tr>
                   <th>Day</th>
                   <th v-for="(period, index) in timetable[0]">Period {{index}} </th>
@@ -167,8 +167,22 @@ function insert (course, ppd, timetable) {
 
   if (timetable[x][y] === null || timetable[x][y] === undefined) {
     timetable[x][y] = course
-  } else {
+  } else if (spaceLeft(timetable)) {
     insert(course, ppd, timetable)
+  }
+}
+
+function spaceLeft (timetable) {
+  let i = 0
+  timetable.forEach((day) => {
+    if (day.length < 3) {
+      i++
+    }
+  })
+  if (i === 0) {
+    return false
+  } else {
+    return true
   }
 }
 
@@ -237,16 +251,14 @@ export default{
       this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours)
       this.courseform = false
       this.results = true
+      this.duration = {
+        weekdays: periodsperday(this.weekdayHours),
+        weekends: periodsperday(this.weekendHours)
+      }
     },
     editCourses () {
       this.results = false
       this.courseform = true
-    }
-  },
-  mounted () {
-    this.duration = {
-      weekdays: periodsperday(this.weekdayHours),
-      weekends: periodsperday(this.weekendHours)
     }
   }
 }
