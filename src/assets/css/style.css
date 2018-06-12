@@ -1,0 +1,32 @@
+*{
+  transition: .5s ease-in-out;
+}
+
+*:hover, *:focus{
+  -webkit-transition: all .3s ease;
+    transition: all .5s ease;
+}
+
+
+body.body{
+  font-family: 'Roboto', sans-serif;
+  color: #666666;
+  background-color: #fcfcfc;
+  min-height: 100vh;
+}
+
+
+.page-container{
+    min-height: 50vh;
+}
+.aside-bg{
+    position: absolute;
+    width: 100%;
+    min-height: 50vh;
+    top: 0;
+    /*left: 0;*/
+}
+
+nav.navbar{
+  font-family: 'Roboto Slab', sans-serif;
+}
