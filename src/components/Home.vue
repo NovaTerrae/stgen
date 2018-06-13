@@ -1,6 +1,8 @@
 <template>
     <div class="page-container card p-4">
+      <!-- The course form is shown only if courseform is true -->
       <div class="row animated fadeIn" v-if="courseform">
+        <!-- A left sidebar for desktop screens, still debating the UI's beauty -->
             <!-- <div class="col-lg-5 d-none d-lg-inline-block">
                 <div class="w-100"style="background-image: url('img/stgen-logo-purple-bg.png'); background-size: cover; background-position: center; height: 100%;"></div>    
             </div>
@@ -16,6 +18,7 @@
 
                       <div class="row">
                         <div class="md-form col-lg-6">
+                          <!-- value here is modeled to weekdayHours -->
                             <input type="number" class="form-control" placeholder="Hours per weekday" v-model="weekdayHours" required>
                             
                             <small class="font-weight-light">How Many hours <b>per day</b> can you read on a weekday (Mon-Fri)</small>
@@ -32,7 +35,7 @@
 
 
                       <small class="small d-block">What courses do you want to read</small>
-
+                      <!-- for as many courses we have in the courses array, we start with a default two... but each coursehas null values in their constructor, we could use that for validation -->
                       <div class="animated fadeIn row lighten-5" v-for="(course, index) in courses" v-bind:class="{purple: index%2==0}">
                           
                           <div class="col-lg-4">
@@ -79,8 +82,10 @@
 
 
                       <div class="d-flex flex-wrap text-center py-4 mt-3">
+                        <!-- add course on click -->
                           <button class="btn btn-primary" id="add" @click="addCourse"><i class="fa fa-plus"></i> New Course</button>
 
+                          <!-- prevent default, call computeResults -->
                           <button class="btn btn-primary" type="submit" id="submit" @click.prevent="computeResults">Get Timetable</button>
                           
                       </div>
@@ -95,13 +100,17 @@
            
       </div>
 
+      <!-- This is the results panel, it's shown once we click generate results -->
       <div class="animated fadeIn" v-if="results">
         <p>Hello, The following study plan has been generated for you based on your request. Make sure to store it...</p>
         <div class="row">
           <div class="col-md-6">
-            <p>Each period lasts <span class="text-primary">{{duration.weekdays}}</span> hours</p>
+            <!-- see object duration's value below -->
+            <p>Each weekday period lasts <span class="text-primary">{{duration.weekdays}}</span> hours</p>
+            <p>Each weekend period lasts <span class="text-primary">{{duration.weekends}}</span> hours</p>
           </div>
           <div class="col-md-6 d-flex">
+            <!-- returns the courseform panel on click -->
             <button class="btn btn-primary ml-auto" @click="editCourses">Edit Courses</button>
           </div>
         </div>
@@ -131,8 +140,9 @@
 </template>
 
 <script>
-// import Vue from 'vue'
+// As this project uses eslint to compile to es5, please note that there are serious rules of indentation, spacing etc and semicolon is not allowed
 class Course {
+  // constructors default to null
   constructor (coursename = null, units = null, difficulty = null) {
     this.coursename = coursename
     this.units = units
@@ -150,6 +160,7 @@ class Course {
   }
 }
 
+// periodsperday, simple enough
 function periodsperday (hours) {
   if (hours <= 2) {
     return 1
@@ -160,11 +171,19 @@ function periodsperday (hours) {
   }
 }
 
+function periodduration (ppd, hours) {
+  return hours * 60 / ppd
+}
+
+// insert function is called whenever we need to insert a course in a timetable,
+// takes a course object, periods per day, and timetable array
 function insert (course, ppd, timetable) {
-  // see if there's space left
+  // see if there's space left in the timetable, timetable must be fully init with predef size
   let m = 0
   const ttt = timetable
+  // ttt.foreach kept giving problems. We assume ttt is multidimensional with i rows and j columns each
   for (let i = 0; i < ttt.length; i++) {
+    // if a column includes an empty object
     if (ttt[i].includes(undefined)) {
       m++
     }
@@ -178,12 +197,14 @@ function insert (course, ppd, timetable) {
   if (timetable[x][y] === null || timetable[x][y] === undefined) {
     timetable[x][y] = course.coursename
   } else {
+    // if the generated slot is occupied, try again
     insert(course, ppd, timetable)
   }
 }
 
 function makeTable (courses, weekendHours, weekdayHours) {
   let timetable = []
+  // 5 days in weekday, 2 days in weekend
   let weeklyTimetable = Array(5)
   let weekendTimetable = Array(2)
   // periods per day
@@ -210,13 +231,16 @@ function makeTable (courses, weekendHours, weekdayHours) {
   for (let i = 0; i < courses.length; i++) {
     // for the number of times each course should occur
     for (let j = 0; j < courses[i].occurs(totalpriority, ppw); j++) {
+      // insert courses in weekly timetable
       insert(courses[i], ppd, weeklyTimetable)
     }
     // same for weekends
     for (let k = 0; k < courses[i].occurs(totalpriority, ppwWeekends); k++) {
+      // insert courses in weekend timetable
       insert(courses[i], ppwd, weekendTimetable)
     }
   }
+  // oh well, let's just push both timetables in the main timetable shall we
   weeklyTimetable.forEach((day) => timetable.push(day))
   weekendTimetable.forEach((day) => timetable.push(day))
 
@@ -224,6 +248,7 @@ function makeTable (courses, weekendHours, weekdayHours) {
 }
 
 export default{
+  // all the above are just functions, the template is binded to this
   data () {
     return {
       courses: [new Course(), new Course()],
@@ -246,24 +271,21 @@ export default{
     },
     computeResults () {
       // validation here, i don't even know how, cause we started with two empty courses I can't just test courses.length
-      this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours)
-      this.courseform = false
+      this.timetable = makeTable(this.courses, this.weekendHours, this.weekdayHours) // call makeTable above
+      this.courseform = false // when we compute results, hide course form and show results
       this.results = true
       this.duration = {
-        weekdays: periodsperday(this.weekdayHours),
-        weekends: periodsperday(this.weekendHours)
+        weekdays: periodduration(periodsperday(this.weekdayHours), this.weekdayHours),
+        weekends: periodduration(periodsperday(this.weekendHours), this.weekendHours)
       }
     },
     editCourses () {
+      // when we need to edit the courses
       this.results = false
       this.courseform = true
     }
   }
 }
-
-// let timetable = this.timetable
-
-// console.log(timetable)
 </script>
 
 <style>

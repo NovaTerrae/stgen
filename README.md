@@ -25,3 +25,19 @@ npm test
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+## Important Files
+
+`src\App.Vue`
+> Contains the structural layout for the app. The header and sidebar...
+
+`src\components\Home.Vue`
+> Contains the main logic and template for each page.
+
+The app uses the Vue PWA template setup, all other files remain as described in the template. Read the documentation
+
+## Todo
+
+> Add form validation
+> Edit serviceworker for offline caching
+> Use localStorage to store generated timetables offline

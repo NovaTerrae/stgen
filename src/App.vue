@@ -1,4 +1,5 @@
 <template>
+  <!-- This only contains the structural layout, sidebar and header -->
   <div>
   <header>
     <nav class="navbar navbar-expand-lg navbar-dark secondary-color fixed-top text-white px-4">
